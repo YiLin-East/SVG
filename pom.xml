@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>SVG</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.24</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-svggen</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-dom</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-transcoder</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-awt-util</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-util</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-xml</artifactId>
+            <version>1.6</version>
+        </dependency>
+<!--
+注意依赖的导入
+batik-dom.jar
+batik-svggen.jar
+batik-awt-util.jar
+batik-util.jar
+batik-xml.jar
+-->
+
+    </dependencies>
+
+    
+</project>
