@@ -1,4 +1,4 @@
-package DrawingTools;
+package DrawingTool;
 
 import java.awt.Color;
 
@@ -24,7 +24,6 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
 
 /**
  * 示例 折线  三组数据

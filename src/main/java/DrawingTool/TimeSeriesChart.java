@@ -1,6 +1,5 @@
-package DrawingTools;
+package DrawingTool;
 
-import org.apache.batik.svggen.font.Font;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;

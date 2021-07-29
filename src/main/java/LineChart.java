@@ -6,10 +6,10 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
@@ -18,12 +18,11 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 合成
+ * 渲染合成
  */
 public class LineChart {
    // XYDataset xyDataset=new XYDataset() ;
@@ -31,13 +30,13 @@ public class LineChart {
     //载入数据
     private static CategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(0, (Comparable) "null", (Comparable) 25);
-        dataset.addValue(18000000, "null", "2030/2/3");//columnkey
-        dataset.addValue(10000000, (Comparable) "null", (Comparable) "2040/5/5");
-        dataset.addValue(11551200, (Comparable) "null", (Comparable) "2050/6/6");
-        dataset.addValue(12551200, (Comparable) "null", (Comparable) "2060/7/5");
-        dataset.addValue(9551200, (Comparable) "null", (Comparable) "2070/8/21");
-        dataset.addValue(20000000, (Comparable) "null", (Comparable) "2080/8/22");
+        dataset.addValue(0, (Comparable) "null", (Comparable) 0);
+        dataset.addValue(18000000, "null",(Comparable) 100);//columnkey
+        dataset.addValue(10000000, (Comparable) "null",(Comparable) 200);
+        dataset.addValue(11551200, (Comparable) "null", (Comparable) 300);
+        dataset.addValue(12551200, (Comparable) "null", (Comparable) 400);
+        dataset.addValue(9551200, (Comparable) "null", (Comparable) 500);
+        dataset.addValue(20000000, (Comparable) "null", (Comparable) 600);
         return dataset;//columnkey
     }
 
@@ -70,34 +69,42 @@ public class LineChart {
 
         ChartUtils.applyCurrentTheme(chart);
 
-        //背景、网格
+        //背景、网格线
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
         plot.setBackgroundPaint(Color.white);   //背景颜色
         plot.setRangeGridlinePaint(Color.gray);//设置网格横线颜色
         plot.setRangeGridlinesVisible(true);       //网格横线是否显示
+
         plot.setDomainGridlinePaint(Color.gray);  //纵向网格线颜色
         plot.setDomainGridlinesVisible(true);    //显示纵向网格线
+        //plot.setDomainGridlinePosition(CategoryAnchor);
         plot.setRangeGridlineStroke(new BasicStroke(0.2f));//数据轴网格线条笔触
         plot.setDomainGridlineStroke(new BasicStroke(0.2f));//
+        //plot.setDomainAxis(set);
 
-        plot.setOutlineVisible(false);
+        //边框可见
+        plot.setOutlineVisible(true);
 
         //设置字体避免乱码
-        Font xfont = new Font("宋体", Font.PLAIN, 16);
-        Font yfont = new Font("宋体", Font.PLAIN, 16);
-        Font zfont = new Font("宋体", Font.PLAIN, 16);
+        Font xfont = new Font("宋体", Font.PLAIN, 12);
+        Font yfont = new Font("宋体", Font.PLAIN, 12);
+        Font zfont = new Font("宋体", Font.PLAIN, 12);
 
-        // X轴
-        CategoryAxis domainAxis =new  IntervalCategoryAxis(10);
+        // X轴//刻度线
+        CategoryAxis domainAxis=new IntervalCategoryAxis(20);//10组数据/为一间隔
+        //CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setLabelFont(xfont);
         domainAxis.setTickLabelFont(xfont);
         domainAxis.setTickLabelPaint(Color.black);//标签颜色
-        domainAxis.setTickMarkOutsideLength(10);
-        domainAxis.setAxisLineVisible(false);
-        domainAxis.setTickMarksVisible(false);
+        domainAxis.setTickMarkOutsideLength(3);//x轴刻度线向下延申部分
+        domainAxis.setAxisLineVisible(true);
+        domainAxis.setTickMarksVisible(true);//刻度线
+
+
+       //domainAxis.setTickLabelInsets(new RectangleInsets(0.0,0.5,1.0,2.2));
         //x轴 label斜显示
-       domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-       plot.setDomainAxis(domainAxis);
+       domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+        plot.setDomainAxis(domainAxis);
 
         //Y轴
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -111,8 +118,11 @@ public class LineChart {
         rangeAxis.setLabelFont(yfont);
        rangeAxis.setTickLabelPaint(Color.blue);
         rangeAxis.setTickLabelFont(yfont);
-        rangeAxis.setAxisLineVisible(false);//隐藏y轴坐标线
-        rangeAxis.setTickMarksVisible(false);//隐藏y轴标线
+        rangeAxis.setAxisLineVisible(true);//y轴坐标线
+        rangeAxis.setTickMarksVisible(true);//y轴标线
+
+        //创建整数刻度单位
+        //rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
 
 
@@ -130,7 +140,8 @@ public class LineChart {
         renderer.setUseFillPaint(true);
         renderer.setSeriesShape(0, new Ellipse2D.Double(-5d, -5d, 10d, 10d));
         renderer.setSeriesPaint(0, new Color(49,133,156));   //设置每个分组的线的颜色
-        renderer.setSeriesStroke(0,new BasicStroke(3f));
+        //折线的粗细
+        renderer.setSeriesStroke(0,new BasicStroke(0.6f));
         renderer.setDefaultFillPaint(Color.black);//折线颜色
         //折线带数字否
         //renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0.00%")));
@@ -141,7 +152,7 @@ public class LineChart {
     }
 
     public static void main(String[] args) {
-        JFreeChart jFreeChart = createChart(createDataset());
+        JFreeChart jFreeChart = createChart(DrawingTool.createDataa.dataset());
         String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
         System.out.println(path);
         try {

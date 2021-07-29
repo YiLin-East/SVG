@@ -23,7 +23,7 @@ public class IntervalCategoryAxis extends CategoryAxis {
     }
 
     /**
-     * 重写获取横坐标的方法，根据步数踩点展示，防止横坐标密密麻麻
+     * 重写获取横坐标的方法，根据num踩点展示，防止横坐标密密麻麻
      */
     @Override
     public List<Tick> refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge) {
