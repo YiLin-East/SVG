@@ -41,6 +41,7 @@ public class IntervalCategoryAxis extends CategoryAxis {
                 Comparable<?> category = (Comparable<?>) o;
                 g2.setFont(getTickLabelFont(category));
                 TextBlock label = new TextBlock();
+               // label.addLine("", getTickLabelFont(category), getTickLabelPaint(category));
                 label.addLine(category.toString(), getTickLabelFont(category), getTickLabelPaint(category));
                 if (edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
                     max = Math.max(max, calculateTextBlockHeight(label, position, g2));

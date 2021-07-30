@@ -2,10 +2,8 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
@@ -66,8 +64,12 @@ public class LineChart {
         chart.setBorderStroke(new BasicStroke(0.3f));            //设置边框宽度
         chart.setBorderVisible(true);                            //设置边框是否可见
         chart.setBorderPaint(Color.gray);                       //设置边框着色
-
         ChartUtils.applyCurrentTheme(chart);
+
+//        //设置主题样式
+//        StandardChartTheme standardChartTheme=new StandardChartTheme("CN");//中文主题
+//        standardChartTheme.setAxisOffset(new RectangleInsets(5,12,5,12));
+//        ChartFactory.setChartTheme(standardChartTheme);
 
         //背景、网格线
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
@@ -77,10 +79,12 @@ public class LineChart {
 
         plot.setDomainGridlinePaint(Color.gray);  //纵向网格线颜色
         plot.setDomainGridlinesVisible(true);    //显示纵向网格线
-        //plot.setDomainGridlinePosition(CategoryAnchor);
+        //
         plot.setRangeGridlineStroke(new BasicStroke(0.2f));//数据轴网格线条笔触
         plot.setDomainGridlineStroke(new BasicStroke(0.2f));//
         //plot.setDomainAxis(set);
+        plot.setAxisOffset(new RectangleInsets(5D,0D,5D,0D));//设置坐标轴与图表显示部分距离
+        plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);//设置范围轴右对齐(Y轴的数字在右边)
 
         //边框可见
         plot.setOutlineVisible(true);
@@ -91,8 +95,8 @@ public class LineChart {
         Font zfont = new Font("宋体", Font.PLAIN, 12);
 
         // X轴//刻度线
-        CategoryAxis domainAxis=new IntervalCategoryAxis(20);//10组数据/为一间隔
-        //CategoryAxis domainAxis = plot.getDomainAxis();
+       // CategoryAxis domainAxis=new IntervalCategoryAxis(10);//10组数据/为一间隔
+        CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setLabelFont(xfont);
         domainAxis.setTickLabelFont(xfont);
         domainAxis.setTickLabelPaint(Color.black);//标签颜色
@@ -103,7 +107,7 @@ public class LineChart {
 
        //domainAxis.setTickLabelInsets(new RectangleInsets(0.0,0.5,1.0,2.2));
         //x轴 label斜显示
-       domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+       domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
         plot.setDomainAxis(domainAxis);
 
         //Y轴
@@ -156,7 +160,7 @@ public class LineChart {
         String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
         System.out.println(path);
         try {
-            SaveChartSVG.save(path,jFreeChart,0,0,1000,500);
+            SaveChartSVG.save(path,jFreeChart,0,0,10000,500);
         }catch (Exception e){
             e.printStackTrace();
         }
