@@ -1,11 +1,10 @@
 
+import DrawingTool.createData;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.axis.*;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
@@ -60,16 +59,17 @@ public class LineChart {
                 true, // 提示信息是否显示
                 false);// 是否使用urls
 
+
         //边框
         chart.setBorderStroke(new BasicStroke(0.3f));            //设置边框宽度
         chart.setBorderVisible(true);                            //设置边框是否可见
         chart.setBorderPaint(Color.gray);                       //设置边框着色
         ChartUtils.applyCurrentTheme(chart);
 
-//        //设置主题样式
-//        StandardChartTheme standardChartTheme=new StandardChartTheme("CN");//中文主题
-//        standardChartTheme.setAxisOffset(new RectangleInsets(5,12,5,12));
-//        ChartFactory.setChartTheme(standardChartTheme);
+        // 设置主题样式
+        // StandardChartTheme standardChartTheme=new StandardChartTheme("CN");//中文主题
+        // standardChartTheme.setAxisOffset(new RectangleInsets(5,12,5,12));
+        // ChartFactory.setChartTheme(standardChartTheme);
 
         //背景、网格线
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
@@ -95,7 +95,7 @@ public class LineChart {
         Font zfont = new Font("宋体", Font.PLAIN, 12);
 
         // X轴//刻度线
-       // CategoryAxis domainAxis=new IntervalCategoryAxis(10);//10组数据/为一间隔
+        // CategoryAxis domainAxis=new IntervalCategoryAxis(10);//10组数据/为一间隔
         CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setLabelFont(xfont);
         domainAxis.setTickLabelFont(xfont);
@@ -105,22 +105,22 @@ public class LineChart {
         domainAxis.setTickMarksVisible(true);//刻度线
 
 
-       //domainAxis.setTickLabelInsets(new RectangleInsets(0.0,0.5,1.0,2.2));
-        //x轴 label斜显示
-       domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        //domainAxis.setTickLabelInsets(new RectangleInsets(0.0,0.5,1.0,2.2));
+        // x轴 label斜显示
+        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
         plot.setDomainAxis(domainAxis);
 
-        //Y轴
+        // Y轴
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setUpperMargin(0.15d);
-//        rangeAxis.setLowerMargin(0.01d);//下边距
+        // rangeAxis.setLowerMargin(0.01d);//下边距
         rangeAxis.setAutoTickUnitSelection(false);
         //设置纵坐标值的间距为
         rangeAxis.setTickUnit(new NumberTickUnit(1000000));
         //纵坐标值范围
         rangeAxis.setRangeWithMargins(-2000000, 18000000);
         rangeAxis.setLabelFont(yfont);
-       rangeAxis.setTickLabelPaint(Color.blue);
+        rangeAxis.setTickLabelPaint(Color.blue);
         rangeAxis.setTickLabelFont(yfont);
         rangeAxis.setAxisLineVisible(true);//y轴坐标线
         rangeAxis.setTickMarksVisible(true);//y轴标线
@@ -128,11 +128,9 @@ public class LineChart {
         //创建整数刻度单位
         //rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-
-
         //走势线
-//        DecimalFormat format = new DecimalFormat("#%");//设置数字格式
-//        rangeAxis.setNumberFormatOverride(format);
+        // DecimalFormat format = new DecimalFormat("#%");//设置数字格式
+        // rangeAxis.setNumberFormatOverride(format);
 
         //渲染器
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
@@ -152,15 +150,58 @@ public class LineChart {
         renderer.setDefaultItemLabelsVisible(true);
         renderer.setDefaultItemLabelFont(zfont);//折线label字体
 
+
+        return chart;
+    }
+
+    private static JFreeChart createModifiedChart(XYSeriesCollection dataset) {
+        JFreeChart chart = ChartFactory.createXYLineChart("Earth", "时间", "熵值",dataset);
+
+        XYPlot xyPlot = chart.getXYPlot();
+        xyPlot.setBackgroundPaint(Color.white);
+        xyPlot.setDomainGridlinePaint(Color.gray);
+        xyPlot.setRangeGridlinePaint(Color.gray);
+
+        // set up font, still some issue occurs
+        Font xFont = new Font("宋体", Font.PLAIN, 12);
+        Font yFont = new Font("宋体", Font.PLAIN, 12);
+
+        // x axis
+        ValueAxis domainAxis = chart.getXYPlot().getDomainAxis();
+        domainAxis.setLabelFont(xFont);
+        domainAxis.setTickLabelFont(xFont);
+        domainAxis.setTickLabelPaint(Color.black);
+
+        // Y axis
+        ValueAxis valueAxis = chart.getXYPlot().getRangeAxis();
+        valueAxis.setUpperMargin(0.15d);
+        // set the range of the Y axis
+        valueAxis.setRangeWithMargins(-2000000, 18000000);
+
+        valueAxis.setLabelFont(yFont);
+        valueAxis.setTickLabelFont(yFont);
+        valueAxis.setTickLabelPaint(Color.blue);
+
+
+        // draw custom gridlines
+        for(double i=0;i<10000000;i+=1000000) {
+            ValueMarker marker = new ValueMarker(i, new Color(30, 47, 255), new BasicStroke(1));
+            xyPlot.addDomainMarker(marker);
+        }
+
+
         return chart;
     }
 
     public static void main(String[] args) {
-        JFreeChart jFreeChart = createChart(DrawingTool.createDataa.dataset());
-        String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
+        JFreeChart jFreeChart;
+        //mod jFreeChart = createChart(createData.dataset());
+        jFreeChart = createModifiedChart(createData.xySeriesDataSet());
+        //mod String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
+        String path = getStringDate()+".svg";
         System.out.println(path);
         try {
-            SaveChartSVG.save(path,jFreeChart,0,0,10000,500);
+            SaveChartSVG.save(path,jFreeChart,0,0,1000,500);
         }catch (Exception e){
             e.printStackTrace();
         }
