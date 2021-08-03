@@ -1,3 +1,5 @@
+package DrawingTool;
+
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileOutputStream;

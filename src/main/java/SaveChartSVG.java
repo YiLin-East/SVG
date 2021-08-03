@@ -25,17 +25,13 @@ public class SaveChartSVG {
             final String namespaceURI = SVGConstants.SVG_NAMESPACE_URI;
             // Create an instance of org.w3c.dom.Document创建 org.w3c.dom.Document 的实例
             //Document document = domImpl.createDocument(namespaceURI, "svg", null);
-
             final DOMImplementation impl = GenericDOMImplementation.getDOMImplementation();
           //final String namespaceURI = SVGConstants.SVG_NAMESPACE_URI;
             final Document domFactory = impl.createDocument(namespaceURI, "svg", null);
-
-
             // Create an instance of the SVG Generator 创建 SVG Generator 的实例
             SVGGraphics2D svgGenerator = new SVGGraphics2D(domFactory);
-
             svgGenerator.setSVGCanvasSize(new Dimension(width,height));
-            // set the precision to avoid a null pointer exception in Batik 1.5
+            // set the precision to avoid a null pointer exception in Batik
             svgGenerator.getGeneratorContext().setPrecision(6);
             // Ask the chart to render into the SVG Graphics2D implementation
             chart.draw(svgGenerator,new Rectangle2D.Double(x, y, width, height), null);

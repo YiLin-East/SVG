@@ -1,14 +1,13 @@
 
-import DrawingTool.createData;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -22,21 +21,6 @@ import java.util.Date;
  * 渲染合成
  */
 public class LineChart {
-   // XYDataset xyDataset=new XYDataset() ;
-
-    //载入数据
-    private static CategoryDataset createDataset() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(0, (Comparable) "null", (Comparable) 0);
-        dataset.addValue(18000000, "null",(Comparable) 100);//columnkey
-        dataset.addValue(10000000, (Comparable) "null",(Comparable) 200);
-        dataset.addValue(11551200, (Comparable) "null", (Comparable) 300);
-        dataset.addValue(12551200, (Comparable) "null", (Comparable) 400);
-        dataset.addValue(9551200, (Comparable) "null", (Comparable) 500);
-        dataset.addValue(20000000, (Comparable) "null", (Comparable) 600);
-        return dataset;//columnkey
-    }
-
 
     //XY数据集 支持多条折线
     private static XYDataset xyDataset(){
@@ -63,7 +47,7 @@ public class LineChart {
         //边框
         chart.setBorderStroke(new BasicStroke(0.3f));            //设置边框宽度
         chart.setBorderVisible(true);                            //设置边框是否可见
-        chart.setBorderPaint(Color.gray);                       //设置边框着色
+        chart.setBorderPaint(Color.black);                       //设置边框着色
         ChartUtils.applyCurrentTheme(chart);
 
         // 设置主题样式
@@ -79,13 +63,13 @@ public class LineChart {
 
         plot.setDomainGridlinePaint(Color.gray);  //纵向网格线颜色
         plot.setDomainGridlinesVisible(true);    //显示纵向网格线
+        plot.setDomainGridlinesVisible(true);
         //
         plot.setRangeGridlineStroke(new BasicStroke(0.2f));//数据轴网格线条笔触
         plot.setDomainGridlineStroke(new BasicStroke(0.2f));//
         //plot.setDomainAxis(set);
         plot.setAxisOffset(new RectangleInsets(5D,0D,5D,0D));//设置坐标轴与图表显示部分距离
         plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);//设置范围轴右对齐(Y轴的数字在右边)
-
         //边框可见
         plot.setOutlineVisible(true);
 
@@ -149,11 +133,13 @@ public class LineChart {
         //renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0.00%")));
         renderer.setDefaultItemLabelsVisible(true);
         renderer.setDefaultItemLabelFont(zfont);//折线label字体
-
-
         return chart;
     }
 
+    /**
+     * 二次修改
+     * @param dataset
+     */
     private static JFreeChart createModifiedChart(XYSeriesCollection dataset) {
         JFreeChart chart = ChartFactory.createXYLineChart("Earth", "时间", "熵值",dataset);
 
@@ -176,39 +162,54 @@ public class LineChart {
         ValueAxis valueAxis = chart.getXYPlot().getRangeAxis();
         valueAxis.setUpperMargin(0.15d);
         // set the range of the Y axis
+       // valueAxis.setStandardTickUnits((TickUnitSource) new NumberTickUnit(1000000));
         valueAxis.setRangeWithMargins(-2000000, 18000000);
-
         valueAxis.setLabelFont(yFont);
         valueAxis.setTickLabelFont(yFont);
         valueAxis.setTickLabelPaint(Color.blue);
 
 
-        // draw custom gridlines
-        for(double i=0;i<10000000;i+=1000000) {
-            ValueMarker marker = new ValueMarker(i, new Color(30, 47, 255), new BasicStroke(1));
+        // 绘制自定义网格线 draw custom gridlines
+        for(double i=0;i<20000;i+=1000) {
+            ValueMarker marker = new ValueMarker(i, new Color(192, 192, 192), new BasicStroke(0.5f));
             xyPlot.addDomainMarker(marker);
         }
 
-
+        //渲染折线
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) xyPlot.getRenderer();
+        //设置形状
+        renderer.setDefaultShapesVisible(false);//是否又圆点
+        renderer.setDefaultShapesFilled(true);
+        //轮廓
+        renderer.setDrawOutlines(true);
+        renderer.setUseFillPaint(true);
+        renderer.setSeriesShape(0, new Ellipse2D.Double(-5d, -5d, 10d, 10d));
+        renderer.setSeriesPaint(0, new Color(49,133,156));   //设置每个分组的线的颜色
+        //折线的粗细
+        renderer.setSeriesStroke(0,new BasicStroke(0.3f));
+        renderer.setDefaultFillPaint(Color.black);//折线颜色
+        renderer.setDefaultItemLabelsVisible(true);
         return chart;
+    }
+
+    public static String getStringDate() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        return formatter.format(currentTime);
     }
 
     public static void main(String[] args) {
         JFreeChart jFreeChart;
-        //mod jFreeChart = createChart(createData.dataset());
-        jFreeChart = createModifiedChart(createData.xySeriesDataSet());
-        //mod String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
-        String path = getStringDate()+".svg";
+        // jFreeChart = createChart(createData.dataset());
+        jFreeChart = createModifiedChart(DataSet.xySeriesDataSet());
+        String path = "D:\\Azhuomian\\SVG\\"+getStringDate()+".svg";
+        //String path = getStringDate()+".svg";
         System.out.println(path);
+        //根据width或者height自动生成合适间隔
         try {
             SaveChartSVG.save(path,jFreeChart,0,0,1000,500);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    public static String getStringDate() {
-        Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        return formatter.format(currentTime);
-      }
 }
