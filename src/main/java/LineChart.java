@@ -21,6 +21,7 @@ import java.util.Date;
  * 渲染合成
  */
 public class LineChart {
+    private static TickUnitSource CeilingTickUnit;
 
     //XY数据集 支持多条折线
     private static XYDataset xyDataset(){
@@ -79,8 +80,8 @@ public class LineChart {
         Font zfont = new Font("宋体", Font.PLAIN, 12);
 
         // X轴//刻度线
-        // CategoryAxis domainAxis=new IntervalCategoryAxis(10);//10组数据/为一间隔
-        CategoryAxis domainAxis = plot.getDomainAxis();
+        CategoryAxis domainAxis=new IntervalCategoryAxis(10);//10组数据/为一间隔
+       // CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setLabelFont(xfont);
         domainAxis.setTickLabelFont(xfont);
         domainAxis.setTickLabelPaint(Color.black);//标签颜色
@@ -153,10 +154,13 @@ public class LineChart {
         Font yFont = new Font("宋体", Font.PLAIN, 12);
 
         // x axis
+       //重写valueAxis
+        //ValueAxis domainAxis =new IntervalValueAxis("",CeilingTickUnit);
         ValueAxis domainAxis = chart.getXYPlot().getDomainAxis();
         domainAxis.setLabelFont(xFont);
         domainAxis.setTickLabelFont(xFont);
         domainAxis.setTickLabelPaint(Color.black);
+        //xyPlot.setDomainAxis(domainAxis);
 
         // Y axis
         ValueAxis valueAxis = chart.getXYPlot().getRangeAxis();
